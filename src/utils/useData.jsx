@@ -12,7 +12,6 @@ const fetchData = async (path) => {
 };
 
 const apiReducer = (state, action) => {
-  console.log({ state }, { action })
   switch (action.type) {
     case 'FETCHING':
       return {

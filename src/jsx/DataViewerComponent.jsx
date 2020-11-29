@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from 'reactstrap';
 import BeersContainer from './BeersContainer.jsx';
 import '../styles/App.css';
@@ -26,7 +26,7 @@ export default function DataViewerComponent() {
   //   setPage((p) => p + 1)
   // }
 
-  console.log('DVC', { data }, { isLoading }, { isActive })
+  console.log('DVC', { data })
   if (!isActive) {
     return (
       <Button
