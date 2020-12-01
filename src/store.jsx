@@ -1,15 +1,14 @@
 import React, { createContext, useReducer } from "react";
-import BeerReducers from './reducers.jsx';
+import { beerReducers } from './reducers.jsx';
 
 const initialState = {
     listBeers: [],
     favouriteBeers: [],
-    removedBeers: [],
     error: null
 };
 
 const Store = ({ children }) => {
-    const [state, dispatch] = useReducer(BeerReducers, initialState);
+    const [state, dispatch] = useReducer(beerReducers, initialState);
     return (
         <Context.Provider value={[state, dispatch]}>
             {children}

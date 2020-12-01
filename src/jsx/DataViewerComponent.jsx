@@ -1,62 +1,67 @@
-import React, { useState } from "react";
-import { Button } from 'reactstrap';
-import BeersContainer from './BeersContainer.jsx';
-import '../styles/App.css';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import { useData } from '../utils/useData.jsx';
+import BeersContainer from './BeersContainer.jsx';
+import DataForm from './DataForm.jsx';
+import NoData from './NoData.jsx';
+import '../styles/loader.css';
 
 export default function DataViewerComponent() {
-  const [page, setPage] = useState(0);
-  const { data, isLoading } = useData(page);
+  const [page, setPage] = useState(1);
+  const [path, setPath] = useState('');
   const [isActive, setIsActive] = useState(false);
-  // const [isDisabled, setIsDisabled] = useState(false);
+  const { data, isLoading } = useData(path);
 
-  const beersComponent = data ? <BeersContainer beers={data} /> : null;
-
-  const activated = () => {
-    setIsActive((prevValue) => !prevValue);
-    setPage((p) => p + 1)
+  const handlePage = (e) => {
+    const { name } = e.target;
+    if (name === 'plus') {
+      setPage((p) => p + 1);
+    } else {
+      setPage((p) => p - 1)
+    }
   }
 
-  // const deactivated = () => {
-  //   console.log('deact', { data })
-  //   if (data.length === 0) {
-  //     console.log('ok')
-  //     return setIsDisabled((prevValue) => !prevValue);
-  //   }
-  //   setPage((p) => p + 1)
-  // }
+  const handlePath = () => {
+    let parts = path.split('&');
+    let newPath = ''
+    if (!path) return;
+    if (parts.length === 3) {
+      newPath = `${parts[0]}&page=${page}&${parts[2]}`
+      setPath(newPath);
+    } else {
+      newPath = `page=${page}&${parts[1]}`
+      setPath(newPath);
+    }
+  }
 
-  console.log('DVC', { data })
+  useEffect(() => {
+    handlePath()
+  }, [page]);
+
+  const onSubmit = data => {
+    const { beers_property, beer_value } = data;
+    if (beers_property && beer_value) {
+      setPath(`${beers_property}=${beer_value}&page=${page}&per_page=10`)
+      setIsActive((prevValue) => !prevValue);
+    }
+    else {
+      setPath(`page=${page}&per_page=10`)
+      setIsActive((prevValue) => !prevValue);
+    }
+  };
+
   if (!isActive) {
-    return (
-      <Button
-        className={'fetchButton'}
-        color="warning"
-        size="xl"
-        onClick={() => activated()}
-      >
-        Click to fetch beers
-      </Button>)
+    return <DataForm onSubmit={onSubmit} />
   } else return (
     <div>
-      {isLoading && "Data is loading…"}
-      {beersComponent}
-      <Button
-        disabled={page === 1}
-        color="warning"
-        size="x xl"
-        onClick={() => setPage((p) => p - 1)}
-      >
-        Back to previous page
-      </Button>
-      <Button
-        // disabled={isDisabled}
-        color="warning"
-        size="x xl"
-        onClick={() => setPage((p) => p + 1)}
-      >
-        Load more beers
-        </Button>
+      {isLoading ?
+        <div className='loader' />
+        :
+        data.length ?
+          <BeersContainer beers={data} onClick={handlePage} page={page} />
+          :
+          <NoData />
+      }
     </div>
   )
 }

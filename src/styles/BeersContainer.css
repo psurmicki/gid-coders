@@ -1,0 +1,19 @@
+.beersList {
+  overflow: auto;
+  width: 40vw;
+  height: 30vh
+}
+
+.beersRow {
+  width: 45vw;
+  height: 30vh
+}
+
+.beersListHeader {
+  color: rgb(243, 220, 117)
+}
+
+.button {
+  padding: 10px;
+  margin: 5px
+}
