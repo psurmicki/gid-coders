@@ -91,7 +91,7 @@ export default function BeersContainer({ beers, onClick, page }) {
         onClick={onClick}
       >
         Load previous beer list
-        </Button>
+      </Button>
       <Button
         name={'plus'}
         disabled={beers.length < 10}
@@ -102,18 +102,15 @@ export default function BeersContainer({ beers, onClick, page }) {
       >
         Load more beers
       </Button>
-      {
-        beers.length < 10 &&
-        <Button
-          outline
-          color="danger"
-          size="xl"
-          className='button'
-          onClick={refreshPage}
-        >
-          Refresh Page
+      <Button
+        outline
+        color="danger"
+        size="xl"
+        className='button'
+        onClick={refreshPage}
+      >
+        Refresh Page
       </Button>
-      }
     </div>
   );
 }
